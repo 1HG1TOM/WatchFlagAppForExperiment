@@ -9,11 +9,15 @@ import SwiftUI
 import WatchConnectivity
 
 struct iPhoneContentView: View {
-    @State private var fileName: String = ""  // ファイル名を保存するState変数
-    @State private var showAlert = false      // 警告ダイアログを表示するためのState
-    @State private var alertMessage = ""      // 警告メッセージを保存するためのState
+    @State private var interviewee: String = ""  // 取材対象の名前を保存するState変数
+    @State private var opponent: String = ""     // 対戦相手の名前を保存するState変数
+    @State private var round: String = "予選"    // 何回戦かを表すState変数
+    @State private var showAlert = false         // 警告ダイアログを表示するためのState
+    @State private var alertMessage = ""         // 警告メッセージを保存するためのState
     @State private var isFileManagerPresented = false  // ファイル管理ビューの表示を制御
     @ObservedObject var watchConnector = WatchConnectivityManager.shared  // WatchConnectivityManagerのインスタンスを参照
+    
+    let rounds = ["予選", "Table64", "Table32", "Table16", "Table8", "準決勝", "決勝", "その他"]
     
     var body: some View {
         NavigationView {
@@ -27,13 +31,29 @@ struct iPhoneContentView: View {
                         .foregroundColor(.red)
                 }
                 
-                // ファイル名を入力するTextField
-                TextField("Enter file name", text: $fileName)
+                // 取材対象のTextField
+                TextField("取材対象の名前を入力", text: $interviewee)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                
+                // 対戦相手のTextField
+                TextField("対戦相手の名前を入力", text: $opponent)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
 
-                // ファイルを保存するボタン
+                // 何回戦かを選択するPicker
+                Picker("何回戦かを選択", selection: $round) {
+                    ForEach(rounds, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .padding()
+
+                // CSVファイルを保存するボタン
                 Button("Save to CSV") {
+                    // ファイル名を生成
+                    let fileName = "\(interviewee)_\(opponent)_\(round)"
                     let success = watchConnector.saveTimestampsToCSV(fileName: fileName)  // WatchConnectivityManagerのメソッドを使用
                     
                     if !success {
@@ -41,8 +61,10 @@ struct iPhoneContentView: View {
                         alertMessage = "同じファイル名が存在します。別の名前を入力してください。"
                         showAlert = true
                     } else {
-                        // ファイル名とデータをリセット
-                        fileName = ""  // テキストフィールドをクリア
+                        // 入力フィールドをリセット
+                        interviewee = ""
+                        opponent = ""
+                        round = "予選"
                         watchConnector.timestamps.removeAll()  // 表示されているデータを消す
                     }
                 }
@@ -113,4 +135,3 @@ struct iPhoneContentView_Previews: PreviewProvider {
         iPhoneContentView()
     }
 }
-
