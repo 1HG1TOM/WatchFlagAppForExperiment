@@ -47,7 +47,7 @@ struct WatchContentView: View {
                 }
                 .padding()
                 .frame(width: isPressedStart ? 140 : 150, height: isPressedStart ? 45 : 50)  // 押した時に小さくする
-                .background(isStartEnabled ? Color.blue : Color.gray)
+                .background(isStartEnabled ? Color.orange : Color.gray)
                 .foregroundColor(.white)
                 .cornerRadius(45)
                 .disabled(!isStartEnabled)
@@ -68,7 +68,7 @@ struct WatchContentView: View {
                 }
                 .padding()
                 .frame(width: isPressedEnd ? 140 : 150, height: isPressedEnd ? 45 : 50)  // 押した時に小さくする
-                .background(isEndEnabled ? Color.blue : Color.gray)
+                .background(isEndEnabled ? Color.orange : Color.gray)
                 .foregroundColor(.white)
                 .cornerRadius(45)
                 .disabled(!isEndEnabled)
@@ -97,10 +97,10 @@ struct WatchContentView: View {
                     }
                 }
                 .padding()
-                .frame(width: isPressedFlag ? 140 : 150, height: isPressedFlag ? 45 : 50)  // 押した時に小さくする
+                .frame(width: isPressedFlag ? 140 : 150, height: isPressedFlag ? 110 : 120)  // 押した時に小さくする
                 .background(isFlagEnabled ? Color.green : Color.gray)  // 緑色のボタン
                 .foregroundColor(.white)
-                .cornerRadius(45)
+                .cornerRadius(15)
                 .disabled(!isFlagEnabled)
                 .buttonStyle(PlainButtonStyle())
             }
