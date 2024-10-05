@@ -82,27 +82,31 @@ struct WatchContentView: View {
             // 2ページ目：フラグボタン
             VStack {
                 // フラグボタン (緑色)
-                Button("フラグ") {
+                Button(action: {
                     withAnimation(.easeInOut(duration: 0.1)) {
                         isPressedFlag = true
                     }
                     if isFlagEnabled {
                         sendEvent(eventName: "フラグ")
-                        WKInterfaceDevice.current().play(.success)  // ハプティックフィードバックを追加
+                        WKInterfaceDevice.current().play(.success)  // ハプティックフィードバック
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         withAnimation {
                             isPressedFlag = false
                         }
                     }
+                }) {
+                    Text("フラグ")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)  // テキストをボタン全体に配置
                 }
-                .padding()
-                .frame(width: isPressedFlag ? 140 : 150, height: isPressedFlag ? 110 : 120)  // 押した時に小さくする
-                .background(isFlagEnabled ? Color.green : Color.gray)  // 緑色のボタン
-                .foregroundColor(.white)
+                .padding(10)
+                .frame(width: isPressedFlag ? 140 : 150, height: isPressedFlag ? 110 : 120)  // アニメーションを含めたサイズ調整
+                .background(isFlagEnabled ? Color.green : Color.gray)  // ボタン背景色
+                .foregroundColor(.white)  // テキストの色
                 .cornerRadius(15)
+                .contentShape(Rectangle())  // ボタン全体をタップ可能にする
                 .disabled(!isFlagEnabled)
-                .buttonStyle(PlainButtonStyle())
             }
             .tabItem {
                 Text("フラグ")
